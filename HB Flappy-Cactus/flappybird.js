@@ -2,7 +2,8 @@
 let board;
 let boardWidth = 360;
 let boardHeight = 640;
-let context; //?
+// TODO: Decipher this
+let context;
 
 // Bird Varibles
 let birdWidth = 34;  // width/height = 408 / 228 = 17/12
@@ -31,8 +32,8 @@ window.onload = function() {
 
   // draw the bird
   // TODO hitboxes?
-  /*context.fillStyle = "green";
-  context.fillRect(bird.x, bird.y, bird.width, bird.height)*/
+  context.fillStyle = "green";
+  context.fillRect(bird.x, bird.y, bird.width, bird.height);
 
   // Load the image
   // TODO: research image() tag
@@ -57,4 +58,7 @@ function update() {
   // clear so frames dont stack
   // TODO: really UNDERSTAND this code
   context.clearRect(0, 0, board.width, board.height);
+
+  // redraw
+  context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height)
 }
