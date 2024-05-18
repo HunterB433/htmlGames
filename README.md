@@ -7,3 +7,6 @@ After completion, I wish to fully understand the ideas behind the games and eith
 I also wish to make pixel art for the games
 
 Here is the link the the original creation whose guides I followed, I highly recommend them
+
+https://www.kennyyipcoding.com/
+https://www.youtube.com/@KennyYipCoding
