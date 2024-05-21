@@ -30,6 +30,8 @@ let pipeY = 0;  // 0 down
 
 // physics
 let velocityX = -2; // pipes move left
+let velocityY = 0; // bird jump speed
+let gravity = 0.4; // gravity
 
 // load pipe images first
 let topPipeImg;
@@ -73,6 +75,9 @@ window.onload = function() {
   // Pipe generation
   setInterval(placePipes, 1500); //every 1.5 seconds
 
+  // listen for Keydown
+  document.addEventListener("keydown", moveBird);
+
 }
 
 // main game loop?
@@ -83,6 +88,11 @@ function update() {
   // TODO: really UNDERSTAND this code
   context.clearRect(0, 0, board.width, board.height);
 
+  // apply acceleration
+  velocityY += gravity;
+  // apply velocity
+  // TODO max and min
+  bird.y = Math.max( bird.y + velocityY, 0);
   // redraw
   context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height)
 
@@ -127,3 +137,14 @@ function placePipes() {
 
   pipeArray.push(bottomPipe);
 }
+
+// TODO: research E
+function moveBird(e) {
+  // Multiple choices
+  if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyX") {
+    //jump 
+    velocityY = -6;
+  }
+}
+
+//function detectCollsion( a, b);
