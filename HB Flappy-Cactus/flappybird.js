@@ -33,6 +33,9 @@ let velocityX = -2; // pipes move left
 let velocityY = 0; // bird jump speed
 let gravity = 0.4; // gravity
 
+// gameflow
+gameover = false;
+
 // load pipe images first
 let topPipeImg;
 let bottomPipeImg;
@@ -84,6 +87,10 @@ window.onload = function() {
 function update() {
   requestAnimationFrame(update);
 
+  if (gameover){
+    return;
+  }
+
   // clear so frames dont stack
   // TODO: really UNDERSTAND this code
   context.clearRect(0, 0, board.width, board.height);
@@ -103,10 +110,18 @@ function update() {
 
 
     context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
+
+    if (detectCollsion(bird, pipe)) {
+      gameover = true;
+    }
   }
 }
 
 function placePipes() {
+
+  if (gameover){
+    return;
+  }
   
   // (0-1) * pipeHeight/2.
   // 0 -> 128  (pipeHeight/4)
@@ -147,4 +162,9 @@ function moveBird(e) {
   }
 }
 
-//function detectCollsion( a, b);
+function detectCollsion( a, b) {
+  return a.x < b.x + b.width &&
+         a.x + a.width > b.x &&
+         a.y < b.y + b.height &&
+         a.y + a.height > b.height;
+  }
