@@ -21,6 +21,20 @@ let bird = {
   height : birdHeight
 }
 
+// Pipe Varibles
+let pipeArray = [];
+let pipeWidth = 64;  // width/height ratio = 384/3072  1/8
+let pipeHeight = 512;
+let pipeX = boardWidth;  // 360 left
+let pipeY = 0;  // 0 down
+
+// physics
+let velocityX = -2; // pipes move left
+
+// load pipe images first
+let topPipeImg;
+let bottomPipeImg;
+
 
 window.onload = function() {
   board = document.getElementById("board");
@@ -46,8 +60,18 @@ window.onload = function() {
     context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
   }
 
+  // load the pipe image  // TODO image?
+  topPipeImg = new Image();
+  topPipeImg.src = "./toppipe.png";
+
+  bottomPipeImg = new Image();
+  bottomPipeImg.src = "./bottompipe.png";
+
   // TODO: research
   requestAnimationFrame(update);
+
+  // Pipe generation
+  setInterval(placePipes, 1500); //every 1.5 seconds
 
 }
 
@@ -61,4 +85,45 @@ function update() {
 
   // redraw
   context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height)
+
+  // redraw pipes
+  for ( let i = 0; i < pipeArray.length; i++) {
+    let pipe = pipeArray[i];
+    pipe.x += velocityX;
+
+
+    context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
+  }
+}
+
+function placePipes() {
+  
+  // (0-1) * pipeHeight/2.
+  // 0 -> 128  (pipeHeight/4)
+  // 1 -> 128 - 256 (pipeHieght/4 - pipeHieght/2) -3/4 ()
+
+  let randomPipeY = pipeY - pipeHeight/4  - Math.random()*(pipeHeight/2);
+  let openingSpace = board.height/4;
+  
+  let topPipe = {
+    img : topPipeImg,
+    x: pipeX,
+    y: randomPipeY,
+    width : pipeWidth,
+    height : pipeHeight,
+    passed : false
+  }
+
+  pipeArray.push(topPipe);
+
+  let bottomPipe = {
+    img : bottomPipeImg,
+    x : pipeX,
+    y : randomPipeY + pipeHeight + openingSpace,
+    width : pipeWidth,
+    height : pipeHeight,
+    passed : false
+  }
+
+  pipeArray.push(bottomPipe);
 }
