@@ -35,6 +35,7 @@ let gravity = 0.4; // gravity
 
 // gameflow
 gameover = false;
+let score = 0;
 
 // load pipe images first
 let topPipeImg;
@@ -102,18 +103,47 @@ function update() {
   bird.y = Math.max( bird.y + velocityY, 0);
   // redraw
   context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height)
+  
+  // check if bird fell off
+  if (bird.y > board.height){
+    gameover = true;
+  }
+
 
   // redraw pipes
   for ( let i = 0; i < pipeArray.length; i++) {
     let pipe = pipeArray[i];
     pipe.x += velocityX;
 
+    // check for passed
+    if (!pipe.passed && bird.x > pipe.x + pipe.width){
+      // since pipes always come in pairs
+      score += 0.5
+      pipe.passed = true;
+    }
 
     context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
 
     if (detectCollsion(bird, pipe)) {
       gameover = true;
     }
+  }
+
+  //score
+  context.fillStyle = "white";
+  context.font = "45px sans-serif";
+  context.fillText(score, 5, 45);
+
+  // should update bird if it passed
+
+  // clearing pipes
+  // TODO move above context?
+  while ( pipeArray.length > 0 && pipeArray[0].x < 0  - pipeWidth){
+    pipeArray.shift();
+  }
+
+  if (gameover){
+    context.fillText("GAME OVER", 5, 90)
   }
 }
 
@@ -159,6 +189,13 @@ function moveBird(e) {
   if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyX") {
     //jump 
     velocityY = -6;
+  }
+
+  if (e.code == "Space" && gameover){
+    bird.y = birdY
+    pipeArray = [];
+    score = 0;
+    gameover = false;
   }
 }
 
