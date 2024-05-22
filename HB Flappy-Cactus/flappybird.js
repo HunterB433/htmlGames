@@ -37,6 +37,11 @@ let gravity = 0.4; // gravity
 gameover = false;
 let score = 0;
 
+// sfx
+let ScoreUp = new Audio("./SFX/ScoreUp.mp3")
+// preload the audio file
+ScoreUp.load;
+
 // load pipe images first
 let topPipeImg;
 let bottomPipeImg;
@@ -120,6 +125,7 @@ function update() {
       // since pipes always come in pairs
       score += 0.5
       pipe.passed = true;
+      ScoreUp.play();
     }
 
     context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
