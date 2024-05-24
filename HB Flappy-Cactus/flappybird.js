@@ -142,7 +142,7 @@ function update() {
       // since pipes always come in pairs
       score += 0.5
       pipe.passed = true;
-      Death.play();
+      ScoreUp.play();
     }
 
     context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
