@@ -38,9 +38,26 @@ gameover = false;
 let score = 0;
 
 // sfx
-let ScoreUp = new Audio("./SFX/ScoreUp.mp3")
+let ScoreUp = new Audio("./SFX/ScoreUp.mp3");
 // preload the audio file
 ScoreUp.load;
+
+let Death = new Audio("./SFX/Death.mp3");
+Death.load;
+
+let Flap = new Audio("./SFX/Flap.mp3");
+Flap.load;
+
+// Audio pool
+const POOL_SIZE = 5;
+let audioPool = [];
+let currentIndex = 0;
+
+// Preload the audio instances
+for( let i = 0 ; i < POOL_SIZE ; i++){
+  let audio = new Audio("./SFX/Flap.mp3");
+  audioPool.push(audio);
+}
 
 // load pipe images first
 let topPipeImg;
@@ -125,13 +142,14 @@ function update() {
       // since pipes always come in pairs
       score += 0.5
       pipe.passed = true;
-      ScoreUp.play();
+      Death.play();
     }
 
     context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
 
     if (detectCollsion(bird, pipe)) {
-      gameover = true;
+      Death.play();
+      gameover = true; 
     }
   }
 
@@ -195,6 +213,14 @@ function moveBird(e) {
   if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyX") {
     //jump 
     velocityY = -6;
+
+
+    let currentFlap = audioPool[currentIndex];
+    currentFlap.currentTime = 0; // Rewind
+    currentFlap.play();
+
+    // increment
+    currentIndex = (currentIndex + 1) % POOL_SIZE;
   }
 
   if (e.code == "Space" && gameover){
